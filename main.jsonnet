@@ -12,5 +12,6 @@ local ignore_alerts = [
 // Generate full output
 local kp = kubernetes + utils.filter(ignore_alerts) + utils.update;
 {
-  'kubernetes-prometheus-rules': utils.prometheusRule('monitoring', kp.prometheusAlerts, 'k8s'),
+  'kubernetes-prometheus-core-rules': utils.prometheusRule('monitoring', 'core', kp.prometheusRules, 'k8s'),
+  'kubernetes-prometheus-alert-rules': utils.prometheusRule('monitoring', 'alert', kp.prometheusAlerts, 'k8s'),
 }

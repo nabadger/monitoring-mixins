@@ -1,7 +1,7 @@
 // Helpers
 {
   // Define a PrometheusRule resource type
-  prometheusRule(namespace, alertType, prometheusLabel):: {
+  prometheusRule(namespace, name, alertType, prometheusLabel):: {
     apiVersion: 'monitoring.kubernetesos.com/v1',
     kind: 'PrometheusRule',
     metadata: {
@@ -9,7 +9,7 @@
         prometheus: prometheusLabel,
         role: 'alert-rules',
       },
-      name: 'prometheus--rules',
+      name: 'prometheus-' + name + '-rules',
       namespace: namespace,
     },
     spec: alertType,
