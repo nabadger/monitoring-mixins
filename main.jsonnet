@@ -1,21 +1,16 @@
-//local kubernetes = (import 'kubernetes-mixin/mixin.libsonnet');
+// Import core configuration
 local kubernetes = (import 'config.libsonnet');
+local utils = (import 'utils.libsonnet');
 
+// Define a list of alerts to ignore (filter them out from upstream)
+local ignore_alerts = [
+  'KubeAPIErrorsHigh',
+  'KubeAPILatencyHigh',
+  'KubeClientCertificateExpiration',
+];
 
-local prometheusRule(namespace, alertType, prometheusLabel) = {
-  apiVersion: 'monitoring.kubernetesos.com/v1',
-  kind: 'PrometheusRule',
-  metadata: {
-    labels: {
-      prometheus: prometheusLabel,
-      role: 'alert-rules',
-    },
-    name: 'prometheus--rules',
-    namespace: namespace,
-  },
-  spec: alertType,
-};
-
+// Generate full output
+local kp = kubernetes + utils.filter(ignore_alerts) + utils.update;
 {
-  'kubernetes-prometheus-rules': prometheusRule('monitoring', kubernetes.prometheusAlerts, 'k8s'),
+  'kubernetes-prometheus-rules': utils.prometheusRule('monitoring', kp.prometheusAlerts, 'k8s'),
 }

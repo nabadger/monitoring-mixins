@@ -11,6 +11,5 @@ set -o pipefail
 rm -rf manifests
 mkdir manifests
 
-                                               # optional, but we would like to generate yaml, not json
 jsonnet -J vendor -m manifests "${1-main.jsonnet}" | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml; rm -f {}' -- {}
 
