@@ -47,19 +47,17 @@
       ),
     },
   },
-  // WIP: Define update function for rules
-  // TODO: Define an external map of rule-name -> expr to avoid inline
-  // if-statement
-  update:: {
-    prometheusAlerts+:: {
+  // Update expressions for either alerts or record definitions.
+  updateExpressions(expr_overrides):: {
+    prometheusRules+:: {
       groups: std.map(
         function(group)
           group {
             rules: std.map(
               function(rule)
-                if rule.alert == 'MyExampleAlert' then
+                if std.objectHas(expr_overrides, rule.record) then
                   rule {
-                    expr: 'MyUpdateExpr',
+                    expr: expr_overrides[rule.record],
                   }
                 else
                   rule,
@@ -69,5 +67,24 @@
         super.groups
       ),
     },
+    prometheusAlerts+:: {
+      groups: std.map(
+        function(group)
+          group {
+            rules: std.map(
+              function(rule)
+                if std.objectHas(expr_overrides, rule.alert) then
+                  rule {
+                    expr: expr_overrides[rule.alert],
+                  }
+                else
+                  rule,
+              group.rules
+            ),
+          },
+        super.groups
+      ),
+    },
+
   },
 }

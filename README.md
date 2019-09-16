@@ -36,12 +36,9 @@ Modifiying rules and alerts can be done in `main.jsonnet`
 
 - *ignore_groups* - filter out entire groups (handy for managed clusters such as GKE where you cannot monitor the api-server).
 - *ignore_rules* - filter out specific rules by name
-
-
-
+- *expr_overrides* - A map of expression overrides where the key is either rule.alert or rule.record name and the value is the new expression.
 
 ## TODO
 - Auto-generate kustomization file
 - Generate grafana dashboards as well
-- Allow configuration of rule-expression overrides
 - Consider adding `isGKE` flag
