@@ -1,4 +1,3 @@
-// Helpers
 {
   // Define a PrometheusRule resource type
   prometheusRule(namespace, name, alertType, prometheusLabel):: {
@@ -14,7 +13,7 @@
     },
     spec: alertType,
   },
-  // Define a filter function to remote unwanted alerts
+  // Define a filter function to remove unwanted alerts
   filter(ignore_alerts):: {
     prometheusAlerts+:: {
       groups: std.map(
@@ -26,6 +25,17 @@
               group.rules
             ),
           },
+        super.groups
+      ),
+    },
+  },
+
+  // Define a filter function to remove unwanted groups
+  filterGroups(ignore_groups):: {
+    prometheusAlerts+:: {
+      groups: std.map(
+        function(group)
+          group {},
         super.groups
       ),
     },
