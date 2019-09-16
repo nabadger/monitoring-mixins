@@ -44,3 +44,4 @@ Modifiying rules and alerts can be done in `main.jsonnet`
 - Auto-generate kustomization file
 - Generate grafana dashboards as well
 - Allow configuration of rule-expression overrides
+- Consider adding `isGKE` flag
