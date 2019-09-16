@@ -1,6 +1,6 @@
 // Import core configuration
 local kubernetes = (import 'config.libsonnet');
-local utils = (import 'utils.libsonnet');
+local utils = (import 'lib/utils.libsonnet');
 
 // Define a list of alerts to ignore from upstream
 local ignore_alerts = [
