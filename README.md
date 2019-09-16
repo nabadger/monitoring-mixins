@@ -21,8 +21,6 @@ Import vendor upstream via jsonnet-bundler.
 jb init
 jb install github.com/kubernetes-monitoring/kubernetes-mixin
 ```
-Additional configuration can be done via `main.jsonnet` and `config.jsonnet`.
-
 
 Generate rendered manifests into the `./manifests` directory.
 
@@ -34,7 +32,7 @@ make
 
 Upstream configuration of *kubernetes-mixin* can be done in `config.jsonnet`
 
-For modifiying rules and alerts use `main.jsonnet`
+Modifiying rules and alerts can be done in `main.jsonnet`
 
 - *ignore_groups* - filter out entire groups (handy for managed clusters such as GKE where you cannot monitor the api-server).
 - *ignore_rules* - filter out specific rules by name
