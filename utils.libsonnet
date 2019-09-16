@@ -32,14 +32,24 @@
 
   // Define a filter function to remove unwanted groups
   filterGroups(ignore_groups):: {
-    prometheusAlerts+:: {
-      groups: std.map(
+    prometheusRules+:: {
+      groups: std.filter(
         function(group)
-          group {},
+          std.count(ignore_groups, group.name) == 0,
+        super.groups
+      ),
+    },
+    prometheusAlerts+:: {
+      groups: std.filter(
+        function(group)
+          std.count(ignore_groups, group.name) == 0,
         super.groups
       ),
     },
   },
+  // WIP: Define update function for rules
+  // TODO: Define an external map of rule-name -> expr to avoid inline
+  // if-statement
   update:: {
     prometheusAlerts+:: {
       groups: std.map(
