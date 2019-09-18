@@ -1,7 +1,7 @@
 {
   // Define a PrometheusRule resource type
   prometheusRule(namespace, name, alertType, prometheusLabel):: {
-    apiVersion: 'monitoring.kubernetesos.com/v1',
+    apiVersion: 'monitoring.coreos.com/v1',
     kind: 'PrometheusRule',
     metadata: {
       labels: {
