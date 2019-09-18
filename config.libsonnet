@@ -4,15 +4,15 @@ local utils = (import 'lib/utils.libsonnet');
 local enableGKESupport = true;
 
 local ignore_alerts = if enableGKESupport then [
-  //  'KubeAPIErrorsHigh',
+  'KubeAPIErrorsHigh',
   'KubeAPILatencyHigh',
   'KubeClientCertificateExpiration',
 ] else [];
 
 // Define a list of groups to ignore from upstream
 local ignore_groups = if enableGKESupport then [
-  //  'kube-scheduler.rules',
-  //  'kube-apiserver.rules',
+  'kube-scheduler.rules',
+  'kube-apiserver.rules',
 ] else [];
 
 // Define a mapping of alert/recordname to expression.
@@ -27,9 +27,11 @@ local expr_overrides = {};
 //   KubeletDown: 'absent(up{job="kubelet"} == 1)',
 // };
 
-//local updates = utils.filterGroups(ignore_groups);  // + utils.filterAlerts(ignore_alerts);
-local updates = utils.filterAlerts(ignore_alerts);
+local updates = utils.filterGroups(ignore_groups) + utils.filterAlerts(ignore_alerts);
 
+//
+// Core configuration
+//
 (import 'node-mixin/mixin.libsonnet') +
 (import 'prometheus-operator/prometheus-operator.libsonnet') +
 //(import 'prometheus-adapter/prometheus-adapter.libsonnet') +
@@ -38,10 +40,6 @@ local updates = utils.filterAlerts(ignore_alerts);
 (import 'kubernetes-mixin/mixin.libsonnet') +
 (import 'prometheus/mixin.libsonnet') +
 (import 'lib/prometheus.libsonnet') + updates + {
-  kubePrometheus+:: {
-    namespace: 'monitoring',
-  },
-} + {
   _config+:: {
     namespace: 'monitoring',
 
@@ -78,9 +76,9 @@ local updates = utils.filterAlerts(ignore_alerts);
       rules: $.prometheusRules + $.prometheusAlerts,
     },
 
-    grafana+:: {
-      dashboards: $.grafanaDashboards,
-    },
+    //grafana+:: {
+    //  dashboards: $.grafanaDashboards,
+    //},
 
   },
 }

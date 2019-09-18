@@ -1,13 +1,16 @@
 {
   // Define a filter function to remove unwanted alerts
-  filterAlertsixxx(ignore_alerts):: {
+  filterAlerts(ignore_alerts):: {
     prometheusAlerts+:: {
       groups: std.map(
         function(group)
           group {
             rules: std.filter(
               function(rule)
-                std.count(ignore_alerts, rule.alert) == 0,
+                if std.objectHas(rule, 'alert') then
+                  std.count(ignore_alerts, rule.alert) == 0
+                else
+                  true,
               group.rules
             ),
           },
@@ -15,15 +18,10 @@
       ),
     },
   },
-  filterAlerts(ignore_alerts):: {
-    prometheusAlerts+: {
-      groupsNEW: {},
-    },
-  },
 
   // Define a filter function to remove unwanted groups
   filterGroups(ignore_groups):: {
-    prometheusRules+: {
+    prometheusRules+:: {
       groups: std.filter(
         function(group)
           std.count(ignore_groups, group.name) == 0,
