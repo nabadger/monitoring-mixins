@@ -3,25 +3,19 @@ local kubernetes = (import 'config.libsonnet');
 local utils = (import 'lib/utils.libsonnet');
 
 // Define a list of alerts to ignore from upstream
-local ignore_alerts = [];
+local enableGKESupport = true;
 
-// Example:
-//
-// local ignore_alerts = [
-//   'KubeAPIErrorsHigh',
-//   'KubeAPILatencyHigh',
-//   'KubeClientCertificateExpiration',
-//] ;
+local ignore_alerts = if enableGKESupport then [
+  'KubeAPIErrorsHigh',
+  'KubeAPILatencyHigh',
+  'KubeClientCertificateExpiration',
+] else [];
 
 // Define a list of groups to ignore from upstream
-local ignore_groups = [];
-
-// Example:
-//
-// local ignore_groups = [
-//   'kube-scheduler.rules',
-//   'kube-apiserver.rules',
-// ];
+local ignore_groups = if enableGKESupport then [
+  'kube-scheduler.rules',
+  'kube-apiserver.rules',
+] else [];
 
 // Define a mapping of alert/recordname to expression.
 // the name matches a rule, then override the `expr` with
