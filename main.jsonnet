@@ -3,6 +3,7 @@ local kp =
   {
     _config+:: {
       namespace: 'monitoring',
+      enableGKESupport: true,
     },
   };
 
