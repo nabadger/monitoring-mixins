@@ -34,11 +34,36 @@ Upstream configuration of *kubernetes-mixin* can be done in `config.jsonnet`
 
 Modifiying rules and alerts can be done in `main.jsonnet`
 
-- *ignore_groups* - filter out entire groups (handy for managed clusters such as GKE where you cannot monitor the api-server).
-- *ignore_rules* - filter out specific rules by name
-- *expr_overrides* - A map of expression overrides where the key is either rule.alert or rule.record name and the value is the new expression.
+### Ignoring Groups
 
-## TODO
-- Auto-generate kustomization file
-- Generate grafana dashboards as well
-- Consider adding `isGKE` flag
+Filter out entire groups (handy for managed clusters such as GKE where you cannot monitor the api-server).
+
+```
+local ignore_groups = [
+  'kube-scheduler.rules',
+  'kube-apiserver.rules'
+];
+```
+
+### Ignoring Alerts
+
+Filter out specific rules by name
+
+```
+local ignore_alerts = [
+  'KubeAPIErrorsHigh',
+  'KubeAPILatencyHigh',
+  'KubeClientCertificateExpiration'
+];
+```
+
+### Updating Expressions
+
+A map of expression overrides where the key is either rule.alert or rule.record name and the value is the new expression.
+
+```
+local expr_overrides = {
+  'namespace:container_cpu_usage_seconds_total:sum_rate': 'sum(rate(container_cpu_usage_seconds_total{job="cadvisor", image!="", container!="POD"}[5m])) by (namespace)',
+  KubeletDown: 'absent(up{job="kubelet"} == 1)',
+};
+```

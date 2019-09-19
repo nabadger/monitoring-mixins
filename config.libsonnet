@@ -3,6 +3,7 @@ local utils = (import 'lib/utils.libsonnet');
 // Define a list of alerts to ignore from upstream
 local enableGKESupport = true;
 
+// Define a list of alerts to ignore from upstream
 local ignore_alerts = if enableGKESupport then [
   'KubeAPIErrorsHigh',
   'KubeAPILatencyHigh',
@@ -16,17 +17,10 @@ local ignore_groups = if enableGKESupport then [
 ] else [];
 
 // Define a mapping of alert/recordname to expression.
-// the name matches a rule, then override the `expr` with
-// the given value
+// Overrides the expr field for the specifeid record name.
 local expr_overrides = {};
 
-// Example:
-//
-// local expr_overrides = {
-//   'namespace:container_cpu_usage_seconds_total:sum_rate': 'sum(rate(container_cpu_usage_seconds_total{job="cadvisor", image!="", container!="POD"}[5m])) by (namespace)',
-//   KubeletDown: 'absent(up{job="kubelet"} == 1)',
-// };
-
+// Create our updates - they will get applied to the generated jsonnet
 local updates = utils.filterGroups(ignore_groups) + utils.filterAlerts(ignore_alerts);
 
 //
@@ -41,7 +35,7 @@ local updates = utils.filterGroups(ignore_groups) + utils.filterAlerts(ignore_al
 (import 'prometheus/mixin.libsonnet') +
 (import 'lib/prometheus.libsonnet') + updates + {
   _config+:: {
-    namespace: 'monitoring',
+    namespace:: error 'namespace is required',
 
     cadvisorSelector: 'job="kubelet"',
     kubeletSelector: 'job="kubelet"',
@@ -76,9 +70,8 @@ local updates = utils.filterGroups(ignore_groups) + utils.filterAlerts(ignore_al
       rules: $.prometheusRules + $.prometheusAlerts,
     },
 
-    //grafana+:: {
-    //  dashboards: $.grafanaDashboards,
-    //},
-
+    grafana+:: {
+      dashboards: $.grafanaDashboards,
+    },
   },
 }
