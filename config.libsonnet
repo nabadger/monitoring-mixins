@@ -68,7 +68,14 @@ local updates = utils.filterGroups(ignore_groups) + utils.filterAlerts(ignore_al
       CoreDNS: $._config.coreDNSSelector,
     },
 
+    alertmanager+:: {
+      name: 'main',
+    },
+
+
     prometheus+:: {
+      name: 'k8s',
+      namespaces: ['kube-system', $._config.namespace],
       rules: $.prometheusRules + $.prometheusAlerts,
     },
     grafana+:: {

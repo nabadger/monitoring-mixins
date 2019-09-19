@@ -28,6 +28,9 @@ Generate rendered manifests into the `./manifests` directory.
 make
 ```
 
+This renders prometheus rules into `./manifests` and grafana dashboards into `./dashboards`.
+
+
 ## Configuration
 
 Upstream configuration of *kubernetes-mixin* can be done in `config.jsonnet`
