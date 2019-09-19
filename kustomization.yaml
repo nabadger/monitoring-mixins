@@ -4,5 +4,4 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 namespace: monitoring
 
 resources:
-- ./manifests/kubernetes-prometheus-core-rules.yaml
-- ./manifests/kubernetes-prometheus-alert-rules.yaml
+- ./manifests/prometheus-rules
