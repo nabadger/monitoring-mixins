@@ -5,6 +5,8 @@ local enableGKESupport = true;
 
 // Define a list of alerts to ignore from upstream
 local ignore_alerts = if enableGKESupport then [
+  'KubeSchedulerDown',
+  'KubeControllerManagerDown',
   'KubeAPIErrorsHigh',
   'KubeAPILatencyHigh',
   'KubeClientCertificateExpiration',
