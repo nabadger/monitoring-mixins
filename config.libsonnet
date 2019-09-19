@@ -26,6 +26,7 @@ local updates = utils.filterGroups(ignore_groups) + utils.filterAlerts(ignore_al
 //
 // Core configuration
 //
+(import 'grafana/grafana.libsonnet') +
 (import 'node-mixin/mixin.libsonnet') +
 (import 'prometheus-operator/prometheus-operator.libsonnet') +
 //(import 'prometheus-adapter/prometheus-adapter.libsonnet') +
@@ -33,7 +34,8 @@ local updates = utils.filterGroups(ignore_groups) + utils.filterAlerts(ignore_al
 (import 'kube-prometheus/rules/rules.libsonnet') +
 (import 'kubernetes-mixin/mixin.libsonnet') +
 (import 'prometheus/mixin.libsonnet') +
-(import 'lib/prometheus.libsonnet') + updates + {
+(import 'lib/prometheus.libsonnet') +
+(import 'lib/grafana.libsonnet') + updates + {
   _config+:: {
     namespace:: error 'namespace is required',
 
@@ -69,7 +71,6 @@ local updates = utils.filterGroups(ignore_groups) + utils.filterAlerts(ignore_al
     prometheus+:: {
       rules: $.prometheusRules + $.prometheusAlerts,
     },
-
     grafana+:: {
       dashboards: $.grafanaDashboards,
     },
