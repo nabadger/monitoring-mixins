@@ -18,8 +18,7 @@ go get github.com/brancz/gojsontoyaml
 
 Import vendor upstream via jsonnet-bundler.
 ```
-jb init
-jb install github.com/kubernetes-monitoring/kubernetes-mixin
+jb install
 ```
 
 Generate rendered manifests into the `./manifests` directory.
